@@ -10,7 +10,7 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long postid;
+    private Long post_id;
 
     private String title;
     private String region;
