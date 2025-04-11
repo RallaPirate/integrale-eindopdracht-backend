@@ -2,6 +2,8 @@ package nl.spplatform.sppapi.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name="posts")
 public class Post {
@@ -13,6 +15,7 @@ public class Post {
     private String title;
     private String region;
     private String posttext;
+    private int upvoteCount;
 
     //constructors
     public Post(){}
@@ -41,6 +44,8 @@ public class Post {
         return posttext;
     }
 
+    public int getUpvoteCount() { return upvoteCount;}
+
 
     public void setTitle(String title){
         this.title = title;
@@ -53,4 +58,6 @@ public class Post {
     public void setPosttext(String posttext){
         this.posttext = posttext;
     }
+
+    public void setUpvoteCount(int upvoteCount){ this.upvoteCount = upvoteCount;}
 }

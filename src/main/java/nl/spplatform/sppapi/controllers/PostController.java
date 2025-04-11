@@ -1,5 +1,7 @@
 package nl.spplatform.sppapi.controllers;
 
+import nl.spplatform.sppapi.dtos.PostResponseDTO;
+import nl.spplatform.sppapi.mappers.PostMapper;
 import nl.spplatform.sppapi.models.Post;
 import nl.spplatform.sppapi.repositories.PostRepository;
 import org.springframework.http.HttpStatus;
@@ -18,15 +20,17 @@ public class PostController {
         this.postRepository = postRepository;
     }
 
+    @CrossOrigin(origins = "*")
     @PostMapping
-    public ResponseEntity<Post> createPost(@RequestBody Post post){
+    public ResponseEntity<PostResponseDTO> createPost(@RequestBody Post post){
         Post savedPost = postRepository.save(post);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedPost);
+        return ResponseEntity.status(HttpStatus.CREATED).body(PostMapper.toResponseDTO(savedPost));
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping
-    public ResponseEntity<List<Post>> getPosts(@RequestParam(required = false) String region){
+    public ResponseEntity<List<PostResponseDTO>> getPosts(@RequestParam(required = false) String region){
         List<Post> posts = (region != null) ? postRepository.findByRegion(region) : postRepository.findAll();
-        return ResponseEntity.ok(posts);
+        return ResponseEntity.ok(PostMapper.toResponseDTOList(posts));
     }
 }
