@@ -2,14 +2,14 @@ package nl.spplatform.sppapi.dtos;
 
 public class PostResponseDTO {
 
-    private Long postid;
+    private Long post_id;
 
     private String title;
     private String region;
     private String posttext;
 
-    public Long getPostid() {
-        return postid;
+    public Long getPost_id() {
+        return post_id;
     }
     public String getTitle() {
         return title;
@@ -30,8 +30,8 @@ public class PostResponseDTO {
     public void setTitle(String title) {
         this.title = title;
     }
-    public void setPostid(Long postid) {
-        this.postid = postid;
+    public void setPost_id(Long postid) {
+        this.post_id = post_id;
     }
 
 

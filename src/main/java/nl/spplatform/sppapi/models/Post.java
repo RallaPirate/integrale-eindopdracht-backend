@@ -20,16 +20,16 @@ public class Post {
     //constructors
     public Post(){}
 
-    public Post(Long postid, String title, String region, String posttext){
-        this.postid = postid;
+    public Post(Long post_id, String title, String region, String posttext){
+        this.post_id = post_id;
         this.title = title;
         this.region = region;
         this.posttext = posttext;
     }
 
     //getters & setters
-    public Long getPostid(){
-        return postid;
+    public Long getPost_id(){
+        return post_id;
     }
 
     public String getTitle(){

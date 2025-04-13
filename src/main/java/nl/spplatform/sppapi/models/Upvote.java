@@ -7,4 +7,16 @@ import jakarta.persistence.*;
 
 public class Upvote {
 
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private long upvote_id;
+
+@ManyToOne
+@JoinColumn(name = "user_id")
+private User user;
+
+@ManyToOne
+@JoinColumn(name = "post_id")
+private Post post;
+
 }
