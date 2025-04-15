@@ -3,7 +3,6 @@ package nl.spplatform.sppapi.dtos;
 public class PostResponseDTO {
 
     private Long postId;
-
     private String title;
     private String region;
     private String text;

@@ -43,7 +43,7 @@ public class Post {
         return text;
     }
 
-
+//TODO: do I really need setters? Will I allow editing after posting?
     public void setTitle(String title){
         this.title = title;
     }
