@@ -13,7 +13,8 @@ public class Upvote {
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private long upvoteId;
 
-private LocalDateTime upvotedAt = LocalDateTime.now();
+@Column(updatable = false)
+private LocalDateTime upvotedAt;
 
 @ManyToOne
 @JoinColumn(name = "user_id")
@@ -23,13 +24,18 @@ private User user;
 @JoinColumn(name = "post_id")
 private Post post;
 
+//LifeCycle hook
+    @PrePersist
+    protected void onCreate() {
+        this.upvotedAt = LocalDateTime.now();
+    }
+
 //constructors
 
     public Upvote(){}
 
-    public Upvote(Long upvoteId, LocalDateTime upvotedAt, User user, Post post){
+    public Upvote(Long upvoteId, User user, Post post){
         this.upvoteId = upvoteId;
-        this.upvotedAt = upvotedAt;
         this.user = user;
         this.post = post;
     }
