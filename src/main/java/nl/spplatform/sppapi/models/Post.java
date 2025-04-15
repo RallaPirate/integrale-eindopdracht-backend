@@ -10,26 +10,25 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long post_id;
+    private Long postId;
 
     private String title;
     private String region;
-    private String posttext;
-    private int upvoteCount;
+    private String text;
 
     //constructors
     public Post(){}
 
-    public Post(Long post_id, String title, String region, String posttext){
-        this.post_id = post_id;
+    public Post(Long postId, String title, String region, String postText){
+        this.postId = postId;
         this.title = title;
         this.region = region;
-        this.posttext = posttext;
+        this.text = text;
     }
 
     //getters & setters
-    public Long getPost_id(){
-        return post_id;
+    public Long getPostId(){
+        return postId;
     }
 
     public String getTitle(){
@@ -40,11 +39,9 @@ public class Post {
         return region;
     }
 
-    public String getPosttext(){
-        return posttext;
+    public String getText(){
+        return text;
     }
-
-    public int getUpvoteCount() { return upvoteCount;}
 
 
     public void setTitle(String title){
@@ -55,9 +52,8 @@ public class Post {
         this.region = region;
     }
 
-    public void setPosttext(String posttext){
-        this.posttext = posttext;
+    public void setText(String text){
+        this.text = text;
     }
 
-    public void setUpvoteCount(int upvoteCount){ this.upvoteCount = upvoteCount;}
 }

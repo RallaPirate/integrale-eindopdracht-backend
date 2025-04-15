@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 public class PostMapper {
     public static PostResponseDTO toResponseDTO(Post post){
         var result = new PostResponseDTO();
-        result.setPost_id(post.getPost_id());
-        result.setPosttext(post.getPosttext());
+        result.setPostId(post.getPostId());
+        result.setText(post.getText());
         result.setRegion(post.getRegion());
         result.setTitle(post.getTitle());
         return result;
