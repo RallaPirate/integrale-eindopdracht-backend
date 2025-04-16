@@ -5,13 +5,13 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "upvotes", uniqueConstraints = @UniqueConstraint(columnNames = {"postid", "userid" }))
+@Table(name = "upvotes", uniqueConstraints = @UniqueConstraint(columnNames = {"post_id", "user_id" }))
 
 public class Upvote {
 
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
-private long upvoteId;
+private Long upvoteId;
 
 @Column(updatable = false)
 private LocalDateTime upvotedAt;
@@ -34,8 +34,7 @@ private Post post;
 
     public Upvote(){}
 
-    public Upvote(Long upvoteId, User user, Post post){
-        this.upvoteId = upvoteId;
+    public Upvote(User user, Post post){
         this.user = user;
         this.post = post;
     }
