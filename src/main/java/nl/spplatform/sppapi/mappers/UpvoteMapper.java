@@ -6,6 +6,10 @@ import nl.spplatform.sppapi.models.Upvote;
 public class UpvoteMapper {
     public static UpvoteResponseDTO responseDTO(Upvote upvote){
         var result = new UpvoteResponseDTO();
-        result.setPostId(Upvote.GetPostId());
+        result.setUpvoteId(upvote.getUpvoteId());
+        result.setUpvotedAt(upvote.getUpvotedAt());
+        result.setUserId(upvote.getUser().getUserId());
+        result.setPostId(upvote.getPost().getPostId());
+        return result;
     }
 }
