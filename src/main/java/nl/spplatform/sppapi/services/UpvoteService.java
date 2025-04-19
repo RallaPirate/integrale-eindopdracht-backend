@@ -26,13 +26,13 @@ public class UpvoteService {
         this.postRepository = postRepository;
     }
 
-    public UpvoteResponseDTO createUpvote(UpvoteRequestDTO upvoteRequestDTO){
+    public UpvoteResponseDTO createUpvote(UpvoteRequestDTO upvoteRequestDTO) {
 
         Long userId = upvoteRequestDTO.getUserId();
         Long postId = upvoteRequestDTO.getPostId();
 
-        if(upvoteRepository.existsByUser_userIdAndPost_postId(userId, postId)){
-        throw new ResponseStatusException(HttpStatus.CONFLICT, "Gebruiker heeft al een upvote op deze post");
+        if (upvoteRepository.existsByUser_userIdAndPost_postId(userId, postId)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Gebruiker heeft al een upvote op deze post");
         }
 
         User user = userRepository.findByUserId(userId);
@@ -40,7 +40,16 @@ public class UpvoteService {
         Upvote upvote = UpvoteMapper.toUpvote(upvoteRequestDTO, user, post);
         Upvote savedUpvote = upvoteRepository.save(upvote);
 
-        return UpvoteMapper.responseDTO(savedUpvote);
+        return UpvoteMapper.toResponseDTO(savedUpvote);
     }
 
+    public void deleteUpvote(UpvoteRequestDTO upvoteRequestDTO) {
+
+        Long userId = upvoteRequestDTO.getUserId();
+        Long postId = upvoteRequestDTO.getPostId();
+        if (!upvoteRepository.existsByUser_userIdAndPost_postId(userId, postId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Er is geen upvote voor deze gebruiker/post gevonden");
+        }
+        upvoteRepository.deleteByUser_userIdAndPost_postId(userId, postId);
+    }
 }
