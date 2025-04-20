@@ -3,6 +3,9 @@ package nl.spplatform.sppapi.mappers;
 import nl.spplatform.sppapi.dtos.PostResponseDTO;
 import nl.spplatform.sppapi.models.Post;
 import nl.spplatform.sppapi.repositories.UpvoteRepository;
+import nl.spplatform.sppapi.services.PostService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +21,4 @@ public class PostMapper {
         return result;
     }
 
-    public static List<PostResponseDTO> toResponseDTOList(List<Post> posts){
-        return posts.stream().map(PostMapper::toResponseDTO).collect(Collectors.toList());
-    }
 }
