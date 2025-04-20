@@ -6,6 +6,7 @@ public class PostResponseDTO {
     private String title;
     private String region;
     private String text;
+    private int upvoteCount;
 
     public Long getPostid() {
         return postId;
@@ -18,6 +19,9 @@ public class PostResponseDTO {
     }
     public String getPosttext() {
         return text;
+    }
+    public int getUpvoteCount(){
+        return upvoteCount;
     }
 
     public void setText(String text) {
@@ -32,6 +36,8 @@ public class PostResponseDTO {
     public void setPostId(Long postId) {
         this.postId = postId;
     }
-
+    public void setUpvoteCount(int upvoteCount){
+        this.upvoteCount = upvoteCount;
+    }
 
 }

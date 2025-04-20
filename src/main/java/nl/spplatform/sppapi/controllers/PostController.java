@@ -24,7 +24,7 @@ public class PostController {
     @PostMapping
     public ResponseEntity<PostResponseDTO> createPost(@RequestBody Post post){
         Post savedPost = postRepository.save(post);
-        return ResponseEntity.status(HttpStatus.CREATED).body(PostMapper.toResponseDTO(savedPost));
+        return ResponseEntity.status(HttpStatus.CREATED).body(PostMapper.toResponseDTO(savedPost, 0));
     }
 
     @CrossOrigin(origins = "*")
