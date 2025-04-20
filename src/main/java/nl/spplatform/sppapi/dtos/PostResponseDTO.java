@@ -2,14 +2,14 @@ package nl.spplatform.sppapi.dtos;
 
 public class PostResponseDTO {
 
-    private Long postid;
-
+    private Long postId;
     private String title;
     private String region;
-    private String posttext;
+    private String text;
+    private int upvoteCount;
 
     public Long getPostid() {
-        return postid;
+        return postId;
     }
     public String getTitle() {
         return title;
@@ -18,11 +18,14 @@ public class PostResponseDTO {
         return region;
     }
     public String getPosttext() {
-        return posttext;
+        return text;
+    }
+    public int getUpvoteCount(){
+        return upvoteCount;
     }
 
-    public void setPosttext(String posttext) {
-        this.posttext = posttext;
+    public void setText(String text) {
+        this.text = text;
     }
     public void setRegion(String region) {
         this.region = region;
@@ -30,9 +33,11 @@ public class PostResponseDTO {
     public void setTitle(String title) {
         this.title = title;
     }
-    public void setPostid(Long postid) {
-        this.postid = postid;
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
-
+    public void setUpvoteCount(int upvoteCount){
+        this.upvoteCount = upvoteCount;
+    }
 
 }

@@ -10,26 +10,25 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long postid;
+    private Long postId;
 
     private String title;
     private String region;
-    private String posttext;
-    private int upvoteCount;
+    private String text;
 
     //constructors
     public Post(){}
 
-    public Post(Long postid, String title, String region, String posttext){
-        this.postid = postid;
+    public Post(Long postId, String title, String region, String postText){
+        this.postId = postId;
         this.title = title;
         this.region = region;
-        this.posttext = posttext;
+        this.text = text;
     }
 
     //getters & setters
-    public Long getPostid(){
-        return postid;
+    public Long getPostId(){
+        return postId;
     }
 
     public String getTitle(){
@@ -40,13 +39,11 @@ public class Post {
         return region;
     }
 
-    public String getPosttext(){
-        return posttext;
+    public String getText(){
+        return text;
     }
 
-    public int getUpvoteCount() { return upvoteCount;}
-
-
+//TODO: do I really need setters? Will I allow editing after posting?
     public void setTitle(String title){
         this.title = title;
     }
@@ -55,9 +52,8 @@ public class Post {
         this.region = region;
     }
 
-    public void setPosttext(String posttext){
-        this.posttext = posttext;
+    public void setText(String text){
+        this.text = text;
     }
 
-    public void setUpvoteCount(int upvoteCount){ this.upvoteCount = upvoteCount;}
 }
