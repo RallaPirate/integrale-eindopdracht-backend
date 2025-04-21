@@ -1,5 +1,6 @@
 package nl.spplatform.sppapi.controllers;
 
+import nl.spplatform.sppapi.dtos.PostRequestDTO;
 import nl.spplatform.sppapi.dtos.PostResponseDTO;
 import nl.spplatform.sppapi.mappers.PostMapper;
 import nl.spplatform.sppapi.models.Post;
@@ -15,19 +16,17 @@ import java.util.List;
 @RequestMapping("/posts")
 public class PostController {
 
-    private final PostRepository postRepository;
     private final PostService postService;
 
-    public PostController(PostRepository postRepository, PostService postService){
-        this.postRepository = postRepository;
+    public PostController(PostService postService){
         this.postService = postService;
     }
 
     @CrossOrigin(origins = "*")
     @PostMapping
-    public ResponseEntity<PostResponseDTO> createPost(@RequestBody Post post){
-        Post savedPost = postRepository.save(post);
-        return ResponseEntity.status(HttpStatus.CREATED).body(PostMapper.toResponseDTO(savedPost, 0));
+    public ResponseEntity<PostResponseDTO> createPost(@RequestBody PostRequestDTO postRequestDTO){
+        PostResponseDTO postResponseDTO = postService.createPost(postRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(postResponseDTO);
     }
 
     @CrossOrigin(origins = "*")

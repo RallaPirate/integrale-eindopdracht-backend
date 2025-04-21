@@ -1,7 +1,9 @@
 package nl.spplatform.sppapi.mappers;
 
+import nl.spplatform.sppapi.dtos.PostRequestDTO;
 import nl.spplatform.sppapi.dtos.PostResponseDTO;
 import nl.spplatform.sppapi.models.Post;
+import nl.spplatform.sppapi.models.User;
 import nl.spplatform.sppapi.repositories.UpvoteRepository;
 import nl.spplatform.sppapi.services.PostService;
 import org.springframework.http.ResponseEntity;
@@ -21,4 +23,12 @@ public class PostMapper {
         return result;
     }
 
+    public static Post toPost(PostRequestDTO postRequestDTO, User user){
+        var result = new Post();
+        result.setTitle(postRequestDTO.getTitle());
+        result.setRegion(postRequestDTO.getRegion());
+        result.setText(postRequestDTO.getPosttext());
+        result.setUser(user);
+        return result;
+    }
 }

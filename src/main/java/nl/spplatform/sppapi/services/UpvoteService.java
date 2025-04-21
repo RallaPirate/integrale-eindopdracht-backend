@@ -37,7 +37,7 @@ public class UpvoteService {
 
         User user = userRepository.findByUserId(userId);
         Post post = postRepository.findByPostId(postId);
-        Upvote upvote = UpvoteMapper.toUpvote(upvoteRequestDTO, user, post);
+        Upvote upvote = UpvoteMapper.toUpvote(user, post);
         Upvote savedUpvote = upvoteRepository.save(upvote);
 
         return UpvoteMapper.toResponseDTO(savedUpvote);

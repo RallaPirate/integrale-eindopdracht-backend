@@ -2,6 +2,7 @@ package nl.spplatform.sppapi.models;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -16,10 +17,23 @@ public class Post {
     private String region;
     private String text;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    //LifeCycle Hook
+    @PrePersist
+    protected void onCreate(){
+        this.createdAt = LocalDateTime.now();
+    }
+
     //constructors
     public Post(){}
 
-    public Post(Long postId, String title, String region, String postText){
+    public Post(Long postId, String title, String region, String text){
         this.postId = postId;
         this.title = title;
         this.region = region;
@@ -43,7 +57,14 @@ public class Post {
         return text;
     }
 
-//TODO: do I really need setters? Will I allow editing after posting?
+    public User getUser(){
+        return user;
+    }
+
+    public LocalDateTime getCreatedAt(){
+        return createdAt;
+    }
+
     public void setTitle(String title){
         this.title = title;
     }
@@ -55,5 +76,10 @@ public class Post {
     public void setText(String text){
         this.text = text;
     }
+
+    public void setUser(User user){
+        this.user = user;
+    }
+
 
 }
