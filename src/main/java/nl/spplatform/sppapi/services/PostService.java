@@ -1,5 +1,6 @@
 package nl.spplatform.sppapi.services;
 
+import nl.spplatform.sppapi.dtos.PostRequestDTO;
 import nl.spplatform.sppapi.dtos.PostResponseDTO;
 import nl.spplatform.sppapi.mappers.PostMapper;
 import nl.spplatform.sppapi.models.Post;
@@ -45,5 +46,11 @@ public class PostService {
                     return PostMapper.toResponseDTO(post, upvoteCount);
                 })
                 .collect(Collectors.toList());
+    }
+
+    public PostResponseDTO createPost(PostRequestDTO postRequestDTO){
+        Post post = PostMapper.toPost(postRequestDTO);
+        Post savedPost = postRepository.save(post);
+        return PostMapper.toResponseDTO(savedPost, 0);
     }
 }

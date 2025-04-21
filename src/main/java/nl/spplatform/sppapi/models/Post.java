@@ -19,7 +19,7 @@ public class Post {
     //constructors
     public Post(){}
 
-    public Post(Long postId, String title, String region, String postText){
+    public Post(Long postId, String title, String region, String text){
         this.postId = postId;
         this.title = title;
         this.region = region;

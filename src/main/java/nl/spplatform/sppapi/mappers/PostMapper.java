@@ -1,5 +1,6 @@
 package nl.spplatform.sppapi.mappers;
 
+import nl.spplatform.sppapi.dtos.PostRequestDTO;
 import nl.spplatform.sppapi.dtos.PostResponseDTO;
 import nl.spplatform.sppapi.models.Post;
 import nl.spplatform.sppapi.repositories.UpvoteRepository;
@@ -21,4 +22,11 @@ public class PostMapper {
         return result;
     }
 
+    public static Post toPost(PostRequestDTO postRequestDTO){
+        var result = new Post();
+        result.setTitle(postRequestDTO.getTitle());
+        result.setRegion(postRequestDTO.getRegion());
+        result.setText(postRequestDTO.getPosttext());
+        return result;
+    }
 }
