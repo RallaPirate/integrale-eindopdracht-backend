@@ -16,11 +16,9 @@ import java.util.List;
 @RequestMapping("/posts")
 public class PostController {
 
-    private final PostRepository postRepository;
     private final PostService postService;
 
-    public PostController(PostRepository postRepository, PostService postService){
-        this.postRepository = postRepository;
+    public PostController(PostService postService){
         this.postService = postService;
     }
 

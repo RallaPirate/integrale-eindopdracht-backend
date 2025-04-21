@@ -16,7 +16,7 @@ public class UpvoteMapper {
         return result;
     }
 
-    public static Upvote toUpvote(UpvoteRequestDTO upvoteRequest, User user, Post post){
+    public static Upvote toUpvote(User user, Post post){
         return new Upvote(user, post);
     }
 }
