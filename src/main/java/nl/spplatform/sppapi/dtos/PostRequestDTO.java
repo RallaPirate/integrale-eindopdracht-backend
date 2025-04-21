@@ -1,10 +1,14 @@
 package nl.spplatform.sppapi.dtos;
 
+import org.antlr.v4.runtime.misc.NotNull;
+
 public class PostRequestDTO {
 
     private String title;
     private String region;
     private String posttext;
+
+    @NotNull
     private Long userId;
 
     public String getTitle(){
