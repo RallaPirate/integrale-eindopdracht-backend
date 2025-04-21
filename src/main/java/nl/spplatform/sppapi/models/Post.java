@@ -2,6 +2,7 @@ package nl.spplatform.sppapi.models;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -19,6 +20,15 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    //LifeCycle Hook
+    @PrePersist
+    protected void onCreate(){
+        this.createdAt = LocalDateTime.now();
+    }
 
     //constructors
     public Post(){}
@@ -51,6 +61,10 @@ public class Post {
         return user;
     }
 
+    public LocalDateTime getCreatedAt(){
+        return createdAt;
+    }
+
     public void setTitle(String title){
         this.title = title;
     }
@@ -66,5 +80,6 @@ public class Post {
     public void setUser(User user){
         this.user = user;
     }
+
 
 }
