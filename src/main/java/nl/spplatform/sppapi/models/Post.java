@@ -16,6 +16,10 @@ public class Post {
     private String region;
     private String text;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     //constructors
     public Post(){}
 
@@ -43,7 +47,10 @@ public class Post {
         return text;
     }
 
-//TODO: do I really need setters? Will I allow editing after posting?
+    public User getUser(){
+        return user;
+    }
+
     public void setTitle(String title){
         this.title = title;
     }
@@ -54,6 +61,10 @@ public class Post {
 
     public void setText(String text){
         this.text = text;
+    }
+
+    public void setUser(User user){
+        this.user = user;
     }
 
 }
