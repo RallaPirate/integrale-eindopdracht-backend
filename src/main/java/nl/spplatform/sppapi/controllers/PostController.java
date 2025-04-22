@@ -8,6 +8,7 @@ import nl.spplatform.sppapi.repositories.PostRepository;
 import nl.spplatform.sppapi.services.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,18 @@ public class PostController {
         this.postService = postService;
     }
 
+    @CrossOrigin(origins = "*")
+    @GetMapping("/test")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<String> securedEndpoint() {
+        return ResponseEntity.ok("You are logged in!");
+    }
+
+    @GetMapping("/testadmin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> securedEndpointAdmin() {
+        return ResponseEntity.ok("You are logged in!");
+    }
     @CrossOrigin(origins = "*")
     @PostMapping
     public ResponseEntity<PostResponseDTO> createPost(@RequestBody PostRequestDTO postRequestDTO){
