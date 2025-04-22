@@ -1,1 +1,2 @@
-INSERT INTO users (username, password, role) VALUES ('user', $2a$10$ZpMvZHODyqVWJHNjCNyCV.zatfk5t.6T/n1n11VyV1V9ZCizsQU36, 'USER');
+INSERT INTO users (email, password, role) VALUES ('user@user.nl', '$2a$10$ZpMvZHODyqVWJHNjCNyCV.zatfk5t.6T/n1n11VyV1V9ZCizsQU36', 'USER');
+INSERT INTO users (email, password, role) VALUES ('admin@admin.nl', '$2a$10$ldfkgQTr3UAgeBnExayKOe9lJFRlMNDHjuR23YsDrKCoJRJYoA74K', 'ADMIN');
