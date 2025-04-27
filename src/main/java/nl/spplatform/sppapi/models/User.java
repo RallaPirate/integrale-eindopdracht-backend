@@ -19,8 +19,7 @@ public class User {
     @Column(nullable = false)
     private String role;
 
-    @OneToOne
-    @JoinColumn(name = "profile_id")
+    @OneToOne (mappedBy = "user", cascade = CascadeType.ALL)
     private Profile profile;
 
     //getters & setters
