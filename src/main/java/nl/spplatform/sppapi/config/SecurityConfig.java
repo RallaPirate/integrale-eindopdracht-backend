@@ -34,9 +34,10 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         // Publieke endpoints
-                        .requestMatchers("/api-docs/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/**").permitAll()
+                        .requestMatchers("/api-docs/**", "/swagger-ui/**", "/v3/api-docs/**", "/api/auth/**").permitAll()
+                                .requestMatchers("/api/posts/**").authenticated()
+//                        .requestMatchers(HttpMethod.GET, "/**").permitAll()
+//                                .requestMatchers(HttpMethod.POST, "/**").permitAll()
 
 //                        // Beveiligde endpoints: Alleen voor admins
 //                        .requestMatchers(HttpMethod.POST, "/posts/**").hasRole("ADMIN")

@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/upvotes")
+@RequestMapping("/api/posts")
 public class UpvoteController {
 
     private final UpvoteService upvoteService;
@@ -18,8 +18,9 @@ public class UpvoteController {
     }
 
     @CrossOrigin(origins = "*")
-    @PostMapping
-    public ResponseEntity<UpvoteResponseDTO> createUpvote(@RequestBody UpvoteRequestDTO upvoteRequestDTO) {
+    @PostMapping("/{id}/upvote")
+    public ResponseEntity<UpvoteResponseDTO> createUpvote(@PathVariable Long id, @RequestBody UpvoteRequestDTO upvoteRequestDTO) {
+        upvoteRequestDTO.setPostId(id);
         UpvoteResponseDTO upvoteResponse = upvoteService.createUpvote(upvoteRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(upvoteResponse);
     }

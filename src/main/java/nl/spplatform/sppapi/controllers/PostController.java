@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/posts")
+@RequestMapping("/api/posts")
 public class PostController {
 
     private final PostService postService;
@@ -23,18 +23,6 @@ public class PostController {
         this.postService = postService;
     }
 
-    @CrossOrigin(origins = "*")
-    @GetMapping("/test")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> securedEndpoint() {
-        return ResponseEntity.ok("You are logged in!");
-    }
-
-    @GetMapping("/testadmin")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> securedEndpointAdmin() {
-        return ResponseEntity.ok("You are logged in!");
-    }
     @CrossOrigin(origins = "*")
     @PostMapping
     public ResponseEntity<PostResponseDTO> createPost(@RequestBody PostRequestDTO postRequestDTO){
