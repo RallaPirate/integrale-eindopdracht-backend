@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         // Publieke endpoints
-                        .requestMatchers("/api-docs/**", "/swagger-ui/**", "/v3/api-docs/**", "/api/auth/**").permitAll()
+                        .requestMatchers("/api-docs/**", "/swagger-ui/**", "/v3/api-docs/**", "/api/auth/**", "/api/register/**").permitAll()
                                 .requestMatchers("/api/posts/**").authenticated()
 //                        .requestMatchers(HttpMethod.GET, "/**").permitAll()
 //                                .requestMatchers(HttpMethod.POST, "/**").permitAll()
