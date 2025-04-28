@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/wordlid")
+@RequestMapping("/api/register")
 public class SignUpController {
 
     private final UserService userService;
@@ -20,6 +20,7 @@ public class SignUpController {
         this.userService = userService;
     }
 
+    @CrossOrigin(origins = "*")
     @PostMapping
     public ResponseEntity<SignUpResponseDTO> createUser(@RequestBody SignUpRequestDTO signUpRequestDTO){
         SignUpResponseDTO result = userService.createUser(signUpRequestDTO);

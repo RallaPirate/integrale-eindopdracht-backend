@@ -35,7 +35,9 @@ public class UserService {
 
         Profile profile = SignUpMapper.toProfile(signUpRequestDTO);
         User user = SignUpMapper.toUser(signUpRequestDTO);
-        String encryptedPassword = passwordEncoderService.encrypt(signUpRequestDTO.getPassword());
+
+        String rawPassword = signUpRequestDTO.getPassword();
+        String encryptedPassword = passwordEncoderService.encrypt(rawPassword);
         user.setPassword(encryptedPassword);
 
         user.setProfile(profile);
