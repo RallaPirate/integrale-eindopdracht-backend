@@ -38,10 +38,10 @@ public class PostService {
 //                })
 //                .collect(Collectors.toList());
 //    }
-    public List<PostResponseDTO> getAllPosts(String region) {
+    public List<PostResponseDTO> getAllPosts(List<String> region) {
         List<Post> posts;
         if(region != null) {
-        posts = postRepository.findByRegion(region);
+        posts = postRepository.findByRegionIn(region);
         }
         else {
          posts = postRepository.findAll();

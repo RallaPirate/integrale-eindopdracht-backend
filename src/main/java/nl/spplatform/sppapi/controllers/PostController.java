@@ -32,7 +32,7 @@ public class PostController {
 
     @CrossOrigin(origins = "*")
     @GetMapping
-    public ResponseEntity<List<PostResponseDTO>> getAllPosts(@RequestParam(required = false) String region){
+    public ResponseEntity<List<PostResponseDTO>> getAllPosts(@RequestParam(required = false) List<String> region){
         List<PostResponseDTO> result = postService.getAllPosts(region);
         return ResponseEntity.ok(result);
     }

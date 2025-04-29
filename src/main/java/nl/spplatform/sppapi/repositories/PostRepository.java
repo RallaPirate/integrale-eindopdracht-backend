@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    List<Post> findByRegion(String region);
+    List<Post> findByRegionIn(List<String> region);
     Post findByPostId(Long postId);
 
 }
