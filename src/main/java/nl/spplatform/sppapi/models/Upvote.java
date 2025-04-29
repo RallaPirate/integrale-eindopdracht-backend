@@ -45,7 +45,4 @@ private Post post;
     public User getUser() {return user;}
     public Post getPost(){ return post;}
 
-
-
-    //TODO: check if I need setters if I do not intend to have anything changed after initial setup. What is best practice?
 }
