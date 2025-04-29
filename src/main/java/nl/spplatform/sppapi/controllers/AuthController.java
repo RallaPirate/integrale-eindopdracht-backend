@@ -29,7 +29,7 @@ import java.util.Map;
         @Autowired
         private JwtUtil jwtUtil;
 
-        @CrossOrigin(origins = "*")
+//        @CrossOrigin(origins = "*")
         @PostMapping("/login")
         public ResponseEntity<AuthResponseDTO> login(@RequestBody User user) {
             try {

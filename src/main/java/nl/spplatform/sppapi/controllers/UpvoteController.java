@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+//@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/posts")
 public class UpvoteController {
@@ -17,7 +18,6 @@ public class UpvoteController {
         this.upvoteService = upvoteService;
     }
 
-    @CrossOrigin(origins = "*")
     @PostMapping("/{id}/upvote")
     public ResponseEntity<UpvoteResponseDTO> createUpvote(@PathVariable Long id, @RequestBody UpvoteRequestDTO upvoteRequestDTO) {
         upvoteRequestDTO.setPostId(id);
@@ -25,9 +25,9 @@ public class UpvoteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(upvoteResponse);
     }
 
-    @CrossOrigin(origins = "*")
-    @DeleteMapping
-    public ResponseEntity<Void> deleteUpvote(@RequestBody UpvoteRequestDTO upvoteRequestDTO){
+    @DeleteMapping("/{id}/upvote")
+    public ResponseEntity<Void> deleteUpvote(@PathVariable Long id, @RequestBody UpvoteRequestDTO upvoteRequestDTO){
+        upvoteRequestDTO.setPostId(id);
         upvoteService.deleteUpvote(upvoteRequestDTO);
         return ResponseEntity.noContent().build();
     }
