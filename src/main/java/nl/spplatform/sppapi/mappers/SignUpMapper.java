@@ -9,7 +9,7 @@ public class SignUpMapper {
     public static User toUser(SignUpRequestDTO signUpRequestDTO) {
         User user = new User();
         user.setEmail(signUpRequestDTO.getEmail());
-        user.setRole("USER");
+        user.setRole("ROLE_USER");
         user.setPassword(signUpRequestDTO.getPassword());
 
         return user;

@@ -1,6 +1,7 @@
 package nl.spplatform.sppapi.controllers;
 
 import nl.spplatform.sppapi.config.JwtUtil;
+import nl.spplatform.sppapi.dtos.AuthResponseDTO;
 import nl.spplatform.sppapi.models.User;
 import nl.spplatform.sppapi.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,17 +29,20 @@ import java.util.Map;
         @Autowired
         private JwtUtil jwtUtil;
 
-        @CrossOrigin(origins = "*")
+//        @CrossOrigin(origins = "*")
         @PostMapping("/login")
-        public Object login(@RequestBody User user) {
+        public ResponseEntity<AuthResponseDTO> login(@RequestBody User user) {
             try {
                 Authentication authentication = authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
                 );
                 String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
-                Map<String, Object> response = new HashMap<>();
-                response.put("token", token);
-                response.put("userId", user.getUserId());
+                AuthResponseDTO response = new AuthResponseDTO();
+                User loggedInUser = userRepository.findByEmail(user.getEmail())
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Gebruiker niet gevonden"));
+                response.setToken(token);
+                response.setUserId(loggedInUser.getUserId());
+                response.setRole(loggedInUser.getRole());
                 return ResponseEntity.ok(response);
             }
             catch(Error e) {

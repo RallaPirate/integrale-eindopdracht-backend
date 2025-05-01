@@ -8,11 +8,13 @@ import nl.spplatform.sppapi.models.User;
 import nl.spplatform.sppapi.repositories.PostRepository;
 import nl.spplatform.sppapi.repositories.UpvoteRepository;
 import nl.spplatform.sppapi.repositories.UserRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,31 +30,76 @@ public class PostService {
         this.upvoteRepository = upvoteRepository;
         this.userRepository = userRepository;
     }
+
+    public List<PostResponseDTO> getAllPosts(List<String> region, String sort, String query) {
+
+        Sort sortOrder;
+        Sort defaultSort = Sort.by(Sort.Direction.DESC, "createdAt");
+        boolean sortInMemory = false;
+
+        switch (sort != null ? sort : "default") {
+            case ("oldest"):
+                sortOrder = Sort.by(Sort.Direction.ASC, "createdAt");
+                break;
+            case ("unpopular"):
+            case ("popular"):
+                sortInMemory = true;
+                sortOrder = null;
+                break;
+            case ("default"):
+            default:
+                sortOrder = defaultSort;
+                break;
+        }
+
+        List<Post> posts;
+         if(region != null && !region.isEmpty() && sortOrder != null){
+             posts = postRepository.findByRegionIn(region, sortOrder);}
+         else if(sortOrder != null) {
+             posts = postRepository.findAll(sortOrder);}
+         else if(region != null && !region.isEmpty()){
+             sortOrder = defaultSort;
+             posts = postRepository.findByRegionIn(region, sortOrder);}
+         else {
+             posts = postRepository.findAll();
+         }
+
+        if(query != null && !query.isBlank()){
+            String lowerQuery = query.toLowerCase();
+            posts = posts.stream()
+                    .filter(post -> post.getTitle().toLowerCase().contains(lowerQuery) ||
+                            post.getText().toLowerCase().contains(lowerQuery))
+                    .collect(Collectors.toList());
+        }
+
+        List<PostResponseDTO> response =posts.stream()
+                .map(post -> {
+                    int upvoteCount = upvoteRepository.countByPost_postId(post.getPostId());
+                    return PostMapper.toResponseDTO(post, upvoteCount);
+                })
+                .collect(Collectors.toList());
+
+        if (sortInMemory) {
+            if ("popular".equals(sort)) {
+                response.sort(Comparator.comparingInt(PostResponseDTO::getUpvoteCount).reversed());
+            } else if ("unpopular".equals(sort)) {
+                response.sort(Comparator.comparingInt(PostResponseDTO::getUpvoteCount));
+            }
+        }
+
+        return response;
+    }
 //
-//    public List<PostResponseDTO> getAllPosts() {
-//        List<Post> posts = postRepository.findAll();
+//
+//        }
 //        return posts.stream()
 //                .map(post -> {
 //                    int upvoteCount = upvoteRepository.countByPost_postId(post.getPostId());
 //                    return PostMapper.toResponseDTO(post, upvoteCount);
 //                })
 //                .collect(Collectors.toList());
+//
 //    }
-    public List<PostResponseDTO> getAllPosts(String region) {
-        List<Post> posts;
-        if(region != null) {
-        posts = postRepository.findByRegion(region);
-        }
-        else {
-         posts = postRepository.findAll();
-        }
-        return posts.stream()
-                .map(post -> {
-                    int upvoteCount = upvoteRepository.countByPost_postId(post.getPostId());
-                    return PostMapper.toResponseDTO(post, upvoteCount);
-                })
-                .collect(Collectors.toList());
-    }
 
     public PostResponseDTO createPost(PostRequestDTO postRequestDTO){
 
