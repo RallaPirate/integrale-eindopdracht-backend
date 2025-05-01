@@ -33,8 +33,10 @@ public class PostController {
 
     @CrossOrigin(origins = "*")
     @GetMapping
-    public ResponseEntity<List<PostResponseDTO>> getAllPosts(@RequestParam(required = false) List<String> region, @RequestParam(required = false, defaultValue = "newest") String sort){
-        List<PostResponseDTO> result = postService.getAllPosts(region, sort);
+    public ResponseEntity<List<PostResponseDTO>> getAllPosts(@RequestParam(required = false) List<String> region,
+                                                             @RequestParam(required = false, defaultValue = "newest") String sort,
+                                                             @RequestParam(required = false) String query){
+        List<PostResponseDTO> result = postService.getAllPosts(region, sort, query);
         return ResponseEntity.ok(result);
     }
 

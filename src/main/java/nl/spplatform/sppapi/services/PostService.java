@@ -31,7 +31,7 @@ public class PostService {
         this.userRepository = userRepository;
     }
 
-    public List<PostResponseDTO> getAllPosts(List<String> region, String sort) {
+    public List<PostResponseDTO> getAllPosts(List<String> region, String sort, String query) {
 
         Sort sortOrder;
         Sort defaultSort = Sort.by(Sort.Direction.DESC, "createdAt");
@@ -63,6 +63,14 @@ public class PostService {
          else {
              posts = postRepository.findAll();
          }
+
+        if(query != null && !query.isBlank()){
+            String lowerQuery = query.toLowerCase();
+            posts = posts.stream()
+                    .filter(post -> post.getTitle().toLowerCase().contains(lowerQuery) ||
+                            post.getText().toLowerCase().contains(lowerQuery))
+                    .collect(Collectors.toList());
+        }
 
         List<PostResponseDTO> response =posts.stream()
                 .map(post -> {
