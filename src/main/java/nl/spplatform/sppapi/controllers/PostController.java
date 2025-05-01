@@ -6,6 +6,7 @@ import nl.spplatform.sppapi.mappers.PostMapper;
 import nl.spplatform.sppapi.models.Post;
 import nl.spplatform.sppapi.repositories.PostRepository;
 import nl.spplatform.sppapi.services.PostService;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,8 +33,8 @@ public class PostController {
 
     @CrossOrigin(origins = "*")
     @GetMapping
-    public ResponseEntity<List<PostResponseDTO>> getAllPosts(@RequestParam(required = false) List<String> region){
-        List<PostResponseDTO> result = postService.getAllPosts(region);
+    public ResponseEntity<List<PostResponseDTO>> getAllPosts(@RequestParam(required = false) List<String> region, @RequestParam(required = false, defaultValue = "newest") String sort){
+        List<PostResponseDTO> result = postService.getAllPosts(region, sort);
         return ResponseEntity.ok(result);
     }
 
