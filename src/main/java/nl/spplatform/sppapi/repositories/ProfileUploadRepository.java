@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ProfileUploadRepository extends JpaRepository<ProfileUpload, Long> {
-    List<ProfileUpload> findByProfileId(Long profileId);
+    List<ProfileUpload> findByProfile_ProfileId(Long profileId);
     List<ProfileUpload> findByProfile(Profile profile);
 }

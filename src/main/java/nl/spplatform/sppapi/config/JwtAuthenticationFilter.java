@@ -2,6 +2,7 @@ package nl.spplatform.sppapi.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import nl.spplatform.sppapi.services.UserDetailsServiceImpl;

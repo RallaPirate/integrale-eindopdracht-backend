@@ -194,6 +194,8 @@ public class SecurityConfig {
                         // SECURED endpoints
                         .requestMatchers("/api/posts/**").authenticated()
                         .requestMatchers("/api/posts/*/upvote").authenticated()
+                        .requestMatchers("/api/profile/**").authenticated()
+                        .requestMatchers("/api/whoami").authenticated()
 
                         // Any other request is forbidden
                         .anyRequest().denyAll()

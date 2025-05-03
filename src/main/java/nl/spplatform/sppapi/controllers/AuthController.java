@@ -2,6 +2,7 @@ package nl.spplatform.sppapi.controllers;
 
 import nl.spplatform.sppapi.config.JwtUtil;
 import nl.spplatform.sppapi.dtos.AuthResponseDTO;
+import nl.spplatform.sppapi.models.Profile;
 import nl.spplatform.sppapi.models.User;
 import nl.spplatform.sppapi.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,12 @@ import java.util.Map;
                 AuthResponseDTO response = new AuthResponseDTO();
                 User loggedInUser = userRepository.findByEmail(user.getEmail())
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Gebruiker niet gevonden"));
+                Profile profile = loggedInUser.getProfile();
+                if(profile == null){
+                    response.setProfileId(-5L);
+                }
+                else{
+                response.setProfileId(profile.getProfileId());}
                 response.setToken(token);
                 response.setUserId(loggedInUser.getUserId());
                 response.setRole(loggedInUser.getRole());
@@ -49,5 +56,9 @@ import java.util.Map;
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Ongeldige email/wachtwoord combinatie");
             }
         }
+    @GetMapping("/api/whoami")
+    public ResponseEntity<String> whoami(@RequestHeader("Authorization") String auth) {
+        return ResponseEntity.ok("Got token: " + auth);
+    }
     }
 
