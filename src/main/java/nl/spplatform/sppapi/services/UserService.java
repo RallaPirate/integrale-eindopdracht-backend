@@ -1,6 +1,5 @@
 package nl.spplatform.sppapi.services;
 
-import nl.spplatform.sppapi.config.PasswordEncoderUtil;
 import nl.spplatform.sppapi.dtos.SignUpRequestDTO;
 import nl.spplatform.sppapi.dtos.SignUpResponseDTO;
 import nl.spplatform.sppapi.mappers.SignUpMapper;
@@ -19,18 +18,18 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoderService passwordEncoderService;
 
-    public UserService(ProfileRepository profileRepository, UserRepository userRepository, PasswordEncoderService passwordEncoderService){
+    public UserService(ProfileRepository profileRepository, UserRepository userRepository, PasswordEncoderService passwordEncoderService) {
         this.profileRepository = profileRepository;
         this.userRepository = userRepository;
         this.passwordEncoderService = passwordEncoderService;
     }
 
-    public SignUpResponseDTO createUser(SignUpRequestDTO signUpRequestDTO){
+    public SignUpResponseDTO createUser(SignUpRequestDTO signUpRequestDTO) {
         String email = signUpRequestDTO.getEmail();
         Optional<User> emailCheck = userRepository.findByEmail(email);
 
-        if(emailCheck.isPresent()){
-        return new SignUpResponseDTO(false, "Emailadres is al in gebruik");
+        if (emailCheck.isPresent()) {
+            return new SignUpResponseDTO(false, "Emailadres is al in gebruik");
         }
 
         Profile profile = SignUpMapper.toProfile(signUpRequestDTO);

@@ -1,8 +1,5 @@
 package nl.spplatform.sppapi.dtos;
 
-import nl.spplatform.sppapi.models.Post;
-import nl.spplatform.sppapi.models.User;
-
 import java.time.LocalDateTime;
 
 public class UpvoteResponseDTO {
@@ -14,23 +11,36 @@ public class UpvoteResponseDTO {
     private Long postId;
     private String postTitle;
 
-//    getters&setters
 
-    public Long getUpvoteId(){ return upvoteId; }
-    public LocalDateTime getUpvotedAt(){ return upvotedAt; }
-    public Long getUserId(){ return userId; }
-    public Long getPostId(){ return postId; }
+    public Long getUpvoteId() {
+        return upvoteId;
+    }
+
+    public void setUpvoteId(Long upvoteId) {
+        this.upvoteId = upvoteId;
+    }
+
+    public LocalDateTime getUpvotedAt() {
+        return upvotedAt;
+    }
+
+    public void setUpvotedAt(LocalDateTime upvotedAt) {
+        this.upvotedAt = upvotedAt;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
 
     public void setUserId(Long userId) {
         this.userId = userId;
     }
-    public void setPostId(Long postId){
+
+    public Long getPostId() {
+        return postId;
+    }
+
+    public void setPostId(Long postId) {
         this.postId = postId;
-    }
-    public void setUpvoteId(Long upvoteId) {
-        this.upvoteId= upvoteId;
-    }
-    public void setUpvotedAt(LocalDateTime upvotedAt){
-        this.upvotedAt = upvotedAt;
     }
 }

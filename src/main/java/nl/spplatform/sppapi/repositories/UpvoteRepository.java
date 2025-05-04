@@ -3,6 +3,7 @@ package nl.spplatform.sppapi.repositories;
 import nl.spplatform.sppapi.models.Upvote;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 

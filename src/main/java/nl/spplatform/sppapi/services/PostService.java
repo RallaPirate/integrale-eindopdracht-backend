@@ -4,16 +4,15 @@ import nl.spplatform.sppapi.dtos.PostRequestDTO;
 import nl.spplatform.sppapi.dtos.PostResponseDTO;
 import nl.spplatform.sppapi.mappers.PostMapper;
 import nl.spplatform.sppapi.models.Post;
+import nl.spplatform.sppapi.models.Profile;
 import nl.spplatform.sppapi.models.User;
 import nl.spplatform.sppapi.repositories.PostRepository;
+import nl.spplatform.sppapi.repositories.ProfileRepository;
 import nl.spplatform.sppapi.repositories.UpvoteRepository;
 import nl.spplatform.sppapi.repositories.UserRepository;
-import nl.spplatform.sppapi.models.Profile;
-import nl.spplatform.sppapi.repositories.ProfileRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Comparator;
@@ -28,7 +27,7 @@ public class PostService {
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
 
-    public PostService(PostRepository postRepository, UpvoteRepository upvoteRepository, UserRepository userRepository, ProfileRepository profileRepository){
+    public PostService(PostRepository postRepository, UpvoteRepository upvoteRepository, UserRepository userRepository, ProfileRepository profileRepository) {
         this.postRepository = postRepository;
         this.upvoteRepository = upvoteRepository;
         this.userRepository = userRepository;
@@ -57,31 +56,26 @@ public class PostService {
         }
 
         List<Post> posts;
-         if(region != null && !region.isEmpty() && sortOrder != null){
-             posts = postRepository.findByRegionIn(region, sortOrder);}
-         else if(sortOrder != null) {
-             posts = postRepository.findAll(sortOrder);}
-         else if(region != null && !region.isEmpty()){
-             sortOrder = defaultSort;
-             posts = postRepository.findByRegionIn(region, sortOrder);}
-         else {
-             posts = postRepository.findAll();
-         }
-
-        if(query != null && !query.isBlank()){
-            String lowerQuery = query.toLowerCase();
-            posts = posts.stream()
-                    .filter(post -> post.getTitle().toLowerCase().contains(lowerQuery) ||
-                            post.getText().toLowerCase().contains(lowerQuery))
-                    .collect(Collectors.toList());
+        if (region != null && !region.isEmpty() && sortOrder != null) {
+            posts = postRepository.findByRegionIn(region, sortOrder);
+        } else if (sortOrder != null) {
+            posts = postRepository.findAll(sortOrder);
+        } else if (region != null && !region.isEmpty()) {
+            sortOrder = defaultSort;
+            posts = postRepository.findByRegionIn(region, sortOrder);
+        } else {
+            posts = postRepository.findAll();
         }
 
-        List<PostResponseDTO> response =posts.stream()
-                .map(post -> {
-                    int upvoteCount = upvoteRepository.countByPost_postId(post.getPostId());
-                    return PostMapper.toResponseDTO(post, upvoteCount);
-                })
-                .collect(Collectors.toList());
+        if (query != null && !query.isBlank()) {
+            String lowerQuery = query.toLowerCase();
+            posts = posts.stream().filter(post -> post.getTitle().toLowerCase().contains(lowerQuery) || post.getText().toLowerCase().contains(lowerQuery)).collect(Collectors.toList());
+        }
+
+        List<PostResponseDTO> response = posts.stream().map(post -> {
+            int upvoteCount = upvoteRepository.countByPost_postId(post.getPostId());
+            return PostMapper.toResponseDTO(post, upvoteCount);
+        }).collect(Collectors.toList());
 
         if (sortInMemory) {
             if ("popular".equals(sort)) {
@@ -106,22 +100,19 @@ public class PostService {
 //    }
 
     public List<PostResponseDTO> getPostsByProfileId(Long profileId) {
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Profiel niet gevonden"));
+        Profile profile = profileRepository.findById(profileId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Profiel niet gevonden"));
 
         User user = profile.getUser();
         List<Post> posts;
         posts = postRepository.findByUser(user);
-        List<PostResponseDTO> response =posts.stream()
-                .map(post -> {
-                    int upvoteCount = upvoteRepository.countByPost_postId(post.getPostId());
-                    return PostMapper.toResponseDTO(post, upvoteCount);
-                })
-                .collect(Collectors.toList());
+        List<PostResponseDTO> response = posts.stream().map(post -> {
+            int upvoteCount = upvoteRepository.countByPost_postId(post.getPostId());
+            return PostMapper.toResponseDTO(post, upvoteCount);
+        }).collect(Collectors.toList());
         return response;
     }
 
-    public PostResponseDTO createPost(PostRequestDTO postRequestDTO){
+    public PostResponseDTO createPost(PostRequestDTO postRequestDTO) {
 
         Long userId = postRequestDTO.getUserId();
         User user = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Gebruiker bestaat niet"));

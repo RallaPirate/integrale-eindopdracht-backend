@@ -26,7 +26,7 @@ public class JwtService {
     @Value("${jwt.Audience}")
     private String AUDIENCE;
 
-    private String ROLES_CLAIMS_NAME = "roles";
+    private final String ROLES_CLAIMS_NAME = "roles";
 
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
@@ -45,17 +45,14 @@ public class JwtService {
         final Claims claims = extractAllClaims(token);
         List<String> roles = claims.get(ROLES_CLAIMS_NAME, List.class);
         if (roles == null) return Collections.emptyList(); // Geen rollen gevonden, retourneer lege lijst
-        return roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        return roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private <T> T extractClaim(String token, Function<Claims, T>
-            claimsResolver) {
+    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
@@ -74,29 +71,19 @@ public class JwtService {
 
     public String generateToken(UserDetails userDetails, Long milliSeconds) {
         Map<String, Object> claims = new HashMap<>();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+        List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         claims.put(ROLES_CLAIMS_NAME, roles);
         return createToken(claims, userDetails.getUsername(), milliSeconds); //time in milliseconds
     }
 
-    private String createToken(Map<String, Object> claims, String
-            subject, long milliSeconds) {
+    private String createToken(Map<String, Object> claims, String subject, long milliSeconds) {
 
         long currentTime = System.currentTimeMillis();
         return createToken(claims, subject, currentTime, milliSeconds);
     }
 
     private String createToken(Map<String, Object> claims, String subject, long currentTime, long validPeriod) {
-        return Jwts.builder()
-                .setClaims(claims)
-                .setAudience(AUDIENCE)
-                .setSubject(subject)
-                .setIssuedAt(new Date(currentTime))
-                .setExpiration(new Date(currentTime + validPeriod))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
-                .compact();
+        return Jwts.builder().setClaims(claims).setAudience(AUDIENCE).setSubject(subject).setIssuedAt(new Date(currentTime)).setExpiration(new Date(currentTime + validPeriod)).signWith(getSigningKey(), SignatureAlgorithm.HS256).compact();
     }
 
     public Boolean validateToken(String token) {

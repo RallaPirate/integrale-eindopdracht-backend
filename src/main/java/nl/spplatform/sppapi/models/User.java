@@ -3,7 +3,7 @@ package nl.spplatform.sppapi.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -19,10 +19,10 @@ public class User {
     @Column(nullable = false)
     private String role;
 
-    @OneToOne (mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Profile profile;
 
-    //getters & setters
+
     public long getUserId() {
         return userId;
     }
@@ -31,31 +31,31 @@ public class User {
         return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public Profile getProfile() {
-        return profile;
-    }
-
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
+    public String getRole() {
+        return role;
+    }
+
     public void setRole(String role) {
         this.role = role;
     }
 
-    public void setProfile(Profile profile){
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
         this.profile = profile;
     }
 }

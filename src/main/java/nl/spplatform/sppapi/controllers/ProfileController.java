@@ -3,10 +3,9 @@ package nl.spplatform.sppapi.controllers;
 import nl.spplatform.sppapi.dtos.PostResponseDTO;
 import nl.spplatform.sppapi.dtos.ProfileUploadRequestDTO;
 import nl.spplatform.sppapi.dtos.ProfileUploadResponseDTO;
-import nl.spplatform.sppapi.models.Post;
 import nl.spplatform.sppapi.repositories.PostRepository;
-import nl.spplatform.sppapi.services.ProfileUploadService;
 import nl.spplatform.sppapi.services.PostService;
+import nl.spplatform.sppapi.services.ProfileUploadService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -28,34 +27,28 @@ import java.util.List;
 @RequestMapping("/api/profile")
 public class ProfileController {
 
-        private final ProfileUploadService profileUploadService;
-        private final PostRepository postRepository;
-        private final PostService postService;
-
-        public ProfileController(ProfileUploadService profileUploadService, PostRepository postRepository, PostService postService) {
-            this.profileUploadService = profileUploadService;
-            this.postRepository = postRepository;
-            this.postService = postService;
-        }
-
+    private final ProfileUploadService profileUploadService;
+    private final PostRepository postRepository;
+    private final PostService postService;
     @Value("${upload.path}")
     private String uploadPath;
 
-        @PostMapping(
-                path ="/{profileId}/upload",
-                consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-        public ResponseEntity<ProfileUploadResponseDTO> uploadFile(
-                @PathVariable Long profileId,
-                @RequestParam("file") MultipartFile file,
-                @RequestParam("description") String description) throws IOException {
+    public ProfileController(ProfileUploadService profileUploadService, PostRepository postRepository, PostService postService) {
+        this.profileUploadService = profileUploadService;
+        this.postRepository = postRepository;
+        this.postService = postService;
+    }
 
-            ProfileUploadRequestDTO profileUploadRequestDTO = new ProfileUploadRequestDTO();
-            profileUploadRequestDTO.setProfileId(profileId);
-            profileUploadRequestDTO.setDescription(description);
+    @PostMapping(path = "/{profileId}/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ProfileUploadResponseDTO> uploadFile(@PathVariable Long profileId, @RequestParam("file") MultipartFile file, @RequestParam("description") String description) throws IOException {
 
-            ProfileUploadResponseDTO responseDTO = profileUploadService.createProfileUpload(file, profileUploadRequestDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
-        }
+        ProfileUploadRequestDTO profileUploadRequestDTO = new ProfileUploadRequestDTO();
+        profileUploadRequestDTO.setProfileId(profileId);
+        profileUploadRequestDTO.setDescription(description);
+
+        ProfileUploadResponseDTO responseDTO = profileUploadService.createProfileUpload(file, profileUploadRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+    }
 
     @GetMapping("/{profileId}/uploads")
     public ResponseEntity<List<ProfileUploadResponseDTO>> getUploadsByProfile(@PathVariable Long profileId) {
@@ -76,10 +69,7 @@ public class ProfileController {
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
                 String contentType = Files.probeContentType(file);
-                return ResponseEntity.ok()
-                        .contentType(MediaType.parseMediaType(contentType))
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
-                        .body(resource);
+                return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType)).header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"").body(resource);
             } else {
                 return ResponseEntity.notFound().build();
             }
@@ -89,12 +79,4 @@ public class ProfileController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-//    @CrossOrigin(origins = "*")
-//    @GetMapping
-//    public ResponseEntity<List<PostResponseDTO>> getAllPosts(@RequestParam(required = false) List<String> region,
-//                                                             @RequestParam(required = false, defaultValue = "newest") String sort,
-//                                                             @RequestParam(required = false) String query){
-//        List<PostResponseDTO> result = postService.getAllPosts(region, sort, query);
-//        return ResponseEntity.ok(result);
-//    }
-    }
+}

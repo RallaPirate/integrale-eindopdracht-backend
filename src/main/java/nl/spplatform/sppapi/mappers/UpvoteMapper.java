@@ -1,13 +1,12 @@
 package nl.spplatform.sppapi.mappers;
 
-import nl.spplatform.sppapi.dtos.UpvoteRequestDTO;
 import nl.spplatform.sppapi.dtos.UpvoteResponseDTO;
 import nl.spplatform.sppapi.models.Post;
 import nl.spplatform.sppapi.models.Upvote;
 import nl.spplatform.sppapi.models.User;
 
 public class UpvoteMapper {
-    public static UpvoteResponseDTO toResponseDTO(Upvote upvote){
+    public static UpvoteResponseDTO toResponseDTO(Upvote upvote) {
         var result = new UpvoteResponseDTO();
         result.setUpvoteId(upvote.getUpvoteId());
         result.setUpvotedAt(upvote.getUpvotedAt());
@@ -16,7 +15,7 @@ public class UpvoteMapper {
         return result;
     }
 
-    public static Upvote toUpvote(User user, Post post){
+    public static Upvote toUpvote(User user, Post post) {
         return new Upvote(user, post);
     }
 }

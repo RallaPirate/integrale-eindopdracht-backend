@@ -11,29 +11,35 @@ public class PostRequestDTO {
     @NotNull
     private Long userId;
 
-    public String getTitle(){
+    public String getTitle() {
         return title;
     }
-    public String getRegion(){
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getRegion() {
         return region;
     }
-    public String getPosttext(){
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public String getPosttext() {
         return posttext;
     }
-    public Long getUserId(){
+
+    public void setPosttext(String posttext) {
+        this.posttext = posttext;
+    }
+
+    public Long getUserId() {
         return userId;
     }
 
-    public void setTitle(String title){
-        this.title = title;
-    }
-    public void setRegion(String region){
-        this.region = region;
-    }
-    public void setPosttext(String posttext){
-        this.posttext = posttext;
-    }
-    public void setUserId(Long userId){
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 }

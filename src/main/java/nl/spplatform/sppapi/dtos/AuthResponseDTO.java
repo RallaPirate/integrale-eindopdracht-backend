@@ -10,26 +10,32 @@ public class AuthResponseDTO {
     public Long getProfileId() {
         return profileId;
     }
-    public String getToken(){
-        return token;
-    }
-    public Long getUserId(){
-        return userId;
-    }
-    public String getRole(){
-        return role;
-    }
 
     public void setProfileId(Long profileId) {
         this.profileId = profileId;
     }
-    public void setToken(String token){
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
         this.token = token;
     }
-    public void setUserId(Long userId){
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
-    public void setRole(String role){
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
         this.role = role;
     }
 }
