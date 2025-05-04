@@ -280,6 +280,7 @@ public class SecurityConfig {
                         .requestMatchers("/api-docs/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/auth/**", "/api/register/**").permitAll()
                         .requestMatchers("/api/profile/uploads/files/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE,"/api/posts/*/upvote").permitAll()
 
                         // SECURED endpoints
                         .requestMatchers("/api/posts/**").authenticated()
