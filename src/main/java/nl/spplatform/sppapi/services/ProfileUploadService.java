@@ -46,8 +46,12 @@ public class ProfileUploadService {
                 extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
             }
 
+            Path uploadDir = Paths.get(uploadPath);
+            if (Files.notExists(uploadDir)) {
+                Files.createDirectories(uploadDir);
+            }
             String newFilename = UUID.randomUUID() + extension;
-            Path filePath = Paths.get(uploadPath, newFilename);
+            Path filePath = uploadDir.resolve(newFilename);
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
             ProfileUpload profileUpload = new ProfileUpload();
