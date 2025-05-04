@@ -14,6 +14,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findByRegionIn(List<String> region, Sort sort);
     Post findByPostId(Long postId);
+    List<Post> findByUser(User user);
 
 }
 

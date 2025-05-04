@@ -8,6 +8,8 @@ import nl.spplatform.sppapi.models.User;
 import nl.spplatform.sppapi.repositories.PostRepository;
 import nl.spplatform.sppapi.repositories.UpvoteRepository;
 import nl.spplatform.sppapi.repositories.UserRepository;
+import nl.spplatform.sppapi.models.Profile;
+import nl.spplatform.sppapi.repositories.ProfileRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -24,11 +26,13 @@ public class PostService {
     private final PostRepository postRepository;
     private final UpvoteRepository upvoteRepository;
     private final UserRepository userRepository;
+    private final ProfileRepository profileRepository;
 
-    public PostService(PostRepository postRepository, UpvoteRepository upvoteRepository, UserRepository userRepository){
+    public PostService(PostRepository postRepository, UpvoteRepository upvoteRepository, UserRepository userRepository, ProfileRepository profileRepository){
         this.postRepository = postRepository;
         this.upvoteRepository = upvoteRepository;
         this.userRepository = userRepository;
+        this.profileRepository = profileRepository;
     }
 
     public List<PostResponseDTO> getAllPosts(List<String> region, String sort, String query) {
@@ -100,6 +104,22 @@ public class PostService {
 //                .collect(Collectors.toList());
 //
 //    }
+
+    public List<PostResponseDTO> getPostsByProfileId(Long profileId) {
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Profiel niet gevonden"));
+
+        User user = profile.getUser();
+        List<Post> posts;
+        posts = postRepository.findByUser(user);
+        List<PostResponseDTO> response =posts.stream()
+                .map(post -> {
+                    int upvoteCount = upvoteRepository.countByPost_postId(post.getPostId());
+                    return PostMapper.toResponseDTO(post, upvoteCount);
+                })
+                .collect(Collectors.toList());
+        return response;
+    }
 
     public PostResponseDTO createPost(PostRequestDTO postRequestDTO){
 
