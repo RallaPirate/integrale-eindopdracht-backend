@@ -15,7 +15,7 @@ public class SignUpMapper {
         return user;
     }
 
-    public static Profile toProfile(SignUpRequestDTO signUpRequestDTO){
+    public static Profile toProfile(SignUpRequestDTO signUpRequestDTO) {
         Profile profile = new Profile();
         profile.setName(signUpRequestDTO.getName());
 

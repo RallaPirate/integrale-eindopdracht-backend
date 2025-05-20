@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface ProfileUploadRepository extends JpaRepository<ProfileUpload, Long> {
     List<ProfileUpload> findByProfile_ProfileId(Long profileId);
+
     List<ProfileUpload> findByProfile(Profile profile);
 }

@@ -8,12 +8,15 @@ public class ProfileUploadRequestDTO {
     public String getDescription() {
         return description;
     }
-    public Long getProfileId() {
-        return profileId;
-    }
+
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public Long getProfileId() {
+        return profileId;
+    }
+
     public void setProfileId(Long profileId) {
         this.profileId = profileId;
     }

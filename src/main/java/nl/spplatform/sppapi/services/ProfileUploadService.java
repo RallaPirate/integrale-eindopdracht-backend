@@ -24,55 +24,50 @@ import java.util.stream.Collectors;
 @Service
 public class ProfileUploadService {
 
-        @Value("${upload.path}")
-        private String uploadPath;
+    private final ProfileUploadRepository profileUploadRepository;
+    private final ProfileRepository profileRepository;
+    @Value("${upload.path}")
+    private String uploadPath;
 
-        private final ProfileUploadRepository profileUploadRepository;
-        private final ProfileRepository profileRepository;
+    public ProfileUploadService(ProfileUploadRepository profileUploadRepository, ProfileRepository profileRepository) {
+        this.profileUploadRepository = profileUploadRepository;
+        this.profileRepository = profileRepository;
+    }
 
-        public ProfileUploadService(ProfileUploadRepository profileUploadRepository, ProfileRepository profileRepository) {
-            this.profileUploadRepository = profileUploadRepository;
-            this.profileRepository = profileRepository;
+    public ProfileUploadResponseDTO createProfileUpload(MultipartFile file, ProfileUploadRequestDTO profileUploadRequestDTO) throws IOException {
+        Profile profile = profileRepository.findById(profileUploadRequestDTO.getProfileId()).orElseThrow(() -> new EntityNotFoundException("Profiel niet gevonden"));
+
+        String originalFilename = file.getOriginalFilename();
+        String extension = "";
+
+        if (originalFilename != null && originalFilename.contains(".")) {
+            extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
         }
 
-        public ProfileUploadResponseDTO createProfileUpload(MultipartFile file, ProfileUploadRequestDTO profileUploadRequestDTO) throws IOException {
-            Profile profile = profileRepository.findById(profileUploadRequestDTO.getProfileId())
-                    .orElseThrow(() -> new EntityNotFoundException("Profiel niet gevonden"));
-
-            String originalFilename = file.getOriginalFilename();
-            String extension = "";
-
-            if (originalFilename != null && originalFilename.contains(".")) {
-                extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
-            }
-
-            Path uploadDir = Paths.get(uploadPath);
-            if (Files.notExists(uploadDir)) {
-                Files.createDirectories(uploadDir);
-            }
-            String newFilename = UUID.randomUUID() + extension;
-            Path filePath = uploadDir.resolve(newFilename);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-            ProfileUpload profileUpload = new ProfileUpload();
-            profileUpload.setFilename(newFilename);
-            profileUpload.setFilepath(filePath.toString());
-            profileUpload.setContentType(file.getContentType());
-            profileUpload.setDescription(profileUploadRequestDTO.getDescription());
-            profileUpload.setProfile(profile);
-
-            profileUploadRepository.save(profileUpload);
-
-            return ProfileUploadMapper.toProfileUploadResponseDTO(profileUpload);
+        Path uploadDir = Paths.get(uploadPath);
+        if (Files.notExists(uploadDir)) {
+            Files.createDirectories(uploadDir);
         }
+        String newFilename = UUID.randomUUID() + extension;
+        Path filePath = uploadDir.resolve(newFilename);
+        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+        ProfileUpload profileUpload = new ProfileUpload();
+        profileUpload.setFilename(newFilename);
+        profileUpload.setFilepath(filePath.toString());
+        profileUpload.setContentType(file.getContentType());
+        profileUpload.setDescription(profileUploadRequestDTO.getDescription());
+        profileUpload.setProfile(profile);
+
+        profileUploadRepository.save(profileUpload);
+
+        return ProfileUploadMapper.toProfileUploadResponseDTO(profileUpload);
+    }
 
     public List<ProfileUploadResponseDTO> getUploadsByProfile(Long profileId) {
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new EntityNotFoundException("Profiel niet gevonden"));
+        Profile profile = profileRepository.findById(profileId).orElseThrow(() -> new EntityNotFoundException("Profiel niet gevonden"));
 
         List<ProfileUpload> uploads = profileUploadRepository.findByProfile(profile);
-        return uploads.stream()
-                .map(ProfileUploadMapper::toProfileUploadResponseDTO)
-                .collect(Collectors.toList());
+        return uploads.stream().map(ProfileUploadMapper::toProfileUploadResponseDTO).collect(Collectors.toList());
     }
-        }
+}

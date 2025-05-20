@@ -1,4 +1,5 @@
 package nl.spplatform.sppapi.Security;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,34 +27,26 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest
-                                            request,
-                                    @NonNull HttpServletResponse
-                                            response,
-                                    @NonNull FilterChain
-                                            filterChain) throws ServletException, IOException {
-        final String authorizationHeader =
-                request.getHeader("Authorization");
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
+        final String authorizationHeader = request.getHeader("Authorization");
         String username = null;
         List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
         String jwt = null;
-        if (authorizationHeader != null &&
-                authorizationHeader.startsWith("Bearer ")) {
+        String path = request.getRequestURI();
+        if (path.startsWith("/api/auth") || path.startsWith("/api/register")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
             username = jwtService.extractUsername(jwt);
             roles = jwtService.extractRoles(jwt);
         }
-        if (username != null &&
-                SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             if (jwtService.validateToken(jwt)) {
-                var usernamePasswordAuthenticationToken = new
-                        UsernamePasswordAuthenticationToken(
-                        username, null,
-                        roles
-                );
-                usernamePasswordAuthenticationToken.setDetails(new
-                        WebAuthenticationDetailsSource().buildDetails(request));
+                var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, null, roles);
+                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }

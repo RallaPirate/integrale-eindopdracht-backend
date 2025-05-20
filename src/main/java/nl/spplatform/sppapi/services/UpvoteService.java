@@ -1,5 +1,6 @@
 package nl.spplatform.sppapi.services;
 
+import jakarta.transaction.Transactional;
 import nl.spplatform.sppapi.dtos.UpvoteRequestDTO;
 import nl.spplatform.sppapi.dtos.UpvoteResponseDTO;
 import nl.spplatform.sppapi.mappers.UpvoteMapper;
@@ -43,6 +44,7 @@ public class UpvoteService {
         return UpvoteMapper.toResponseDTO(savedUpvote);
     }
 
+    @Transactional
     public void deleteUpvote(UpvoteRequestDTO upvoteRequestDTO) {
 
         Long userId = upvoteRequestDTO.getUserId();

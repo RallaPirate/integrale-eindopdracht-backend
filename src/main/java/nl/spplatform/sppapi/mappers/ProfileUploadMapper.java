@@ -16,7 +16,7 @@ public class ProfileUploadMapper {
         return profileUploadResponseDTO;
     }
 
-    public static ProfileUpload toProfileUpload(ProfileUploadRequestDTO profileUploadRequestDTO, Profile profile){
+    public static ProfileUpload toProfileUpload(ProfileUploadRequestDTO profileUploadRequestDTO, Profile profile) {
         var result = new ProfileUpload();
         result.setDescription(profileUploadRequestDTO.getDescription());
         result.setProfile(profile);
