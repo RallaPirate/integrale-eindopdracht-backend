@@ -32,6 +32,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String username = null;
         List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
         String jwt = null;
+        String path = request.getRequestURI();
+        if (path.startsWith("/api/auth") || path.startsWith("/api/register")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
             username = jwtService.extractUsername(jwt);

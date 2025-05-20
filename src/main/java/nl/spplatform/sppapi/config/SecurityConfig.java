@@ -27,9 +27,11 @@ import java.util.List;
 public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;
+    private final JwtRequestFilter jwtRequestFilter;
 
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService) {
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtRequestFilter jwtRequestFilter) {
         this.userDetailsService = userDetailsService;
+        this.jwtRequestFilter = jwtRequestFilter;
     }
 
     @Bean
@@ -37,14 +39,21 @@ public class SecurityConfig {
 
         http.httpBasic(hp -> hp.disable()).authorizeHttpRequests(auth -> auth
                         // PUBLIC endpoints
-                        .requestMatchers("/api-docs/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll().requestMatchers("/api/auth/**", "/api/register/**").permitAll().requestMatchers("/api/profile/uploads/files/**").permitAll().requestMatchers(HttpMethod.DELETE, "/api/posts/*/upvote").permitAll()
+                        .requestMatchers("/api-docs/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/api/register/**").permitAll()
+                        .requestMatchers("/api/profile/uploads/files/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/posts/*/upvote").permitAll()
 
                         // SECURED endpoints
                         .requestMatchers("/api/posts/**").authenticated().requestMatchers("/api/posts/*/upvote").authenticated().requestMatchers("/api/profile/**").authenticated().requestMatchers("/api/whoami").authenticated()
 
                         // Any other request is forbidden
-                        .anyRequest().denyAll()).addFilterBefore(new JwtRequestFilter(jwtService), UsernamePasswordAuthenticationFilter.class) // aanpassing
-                .csrf(csrf -> csrf.disable()).cors(cors -> cors.configurationSource(corsConfigurationSource())).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                        .anyRequest().denyAll())
+
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }
 
@@ -73,18 +82,4 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
-    @Bean
-    public CorsFilter corsFilter() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
-    }
 }
-
