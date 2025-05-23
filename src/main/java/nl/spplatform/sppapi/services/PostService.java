@@ -34,7 +34,7 @@ public class PostService {
         this.profileRepository = profileRepository;
     }
 
-    public List<PostResponseDTO> getAllPosts(List<String> region, String sort, String query) {
+    public List<PostResponseDTO> getAllPosts(List<String> region, String sort, String query, Long userId) {
 
         Sort sortOrder;
         Sort defaultSort = Sort.by(Sort.Direction.DESC, "createdAt");
@@ -74,7 +74,10 @@ public class PostService {
 
         List<PostResponseDTO> response = posts.stream().map(post -> {
             int upvoteCount = upvoteRepository.countByPost_postId(post.getPostId());
-            return PostMapper.toResponseDTO(post, upvoteCount);
+            //declared these parameters loose, due to debugging a recurring bug and now that it works, I don't dare to touch it again...
+            Long postId = post.getPostId();
+            Boolean upvotedByUser = upvoteRepository.existsByUser_userIdAndPost_postId(userId,postId);
+            return PostMapper.toResponseDTO(post, upvoteCount, upvotedByUser);
         }).collect(Collectors.toList());
 
         if (sortInMemory) {
@@ -101,13 +104,16 @@ public class PostService {
 
     public List<PostResponseDTO> getPostsByProfileId(Long profileId) {
         Profile profile = profileRepository.findById(profileId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Profiel niet gevonden"));
-
         User user = profile.getUser();
         List<Post> posts;
         posts = postRepository.findByUser(user);
         List<PostResponseDTO> response = posts.stream().map(post -> {
             int upvoteCount = upvoteRepository.countByPost_postId(post.getPostId());
-            return PostMapper.toResponseDTO(post, upvoteCount);
+            //declared these parameters loose, due to debugging a recurring bug and now that it works, I don't dare to touch it again...
+            Long userId = user.getUserId();
+            Long postId = post.getPostId();
+            Boolean upvotedByUser = upvoteRepository.existsByUser_userIdAndPost_postId(userId, postId);
+            return PostMapper.toResponseDTO(post, upvoteCount, upvotedByUser);
         }).collect(Collectors.toList());
         return response;
     }
@@ -118,6 +124,6 @@ public class PostService {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Gebruiker bestaat niet"));
         Post post = PostMapper.toPost(postRequestDTO, user);
         Post savedPost = postRepository.save(post);
-        return PostMapper.toResponseDTO(savedPost, 0);
+        return PostMapper.toResponseDTO(savedPost);
     }
 }

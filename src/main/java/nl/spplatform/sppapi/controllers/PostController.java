@@ -28,8 +28,8 @@ public class PostController {
 
     @CrossOrigin(origins = "*")
     @GetMapping
-    public ResponseEntity<List<PostResponseDTO>> getAllPosts(@RequestParam(required = false) List<String> region, @RequestParam(required = false, defaultValue = "newest") String sort, @RequestParam(required = false) String query) {
-        List<PostResponseDTO> result = postService.getAllPosts(region, sort, query);
+    public ResponseEntity<List<PostResponseDTO>> getAllPosts(@RequestParam(required = false) List<String> region, @RequestParam(required = false, defaultValue = "newest") String sort, @RequestParam(required = false) String query, @RequestParam(required = true) Long userId) {
+        List<PostResponseDTO> result = postService.getAllPosts(region, sort, query, userId);
         return ResponseEntity.ok(result);
     }
 
