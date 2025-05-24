@@ -40,11 +40,13 @@ public class ProfileController {
     }
 
     @PostMapping(path = "/{profileId}/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ProfileUploadResponseDTO> uploadFile(@PathVariable Long profileId, @RequestParam("file") MultipartFile file, @RequestParam("description") String description) throws IOException {
+    public ResponseEntity<ProfileUploadResponseDTO> uploadFile(@PathVariable Long profileId, @RequestPart("file") MultipartFile file, @RequestPart("description") String description, @RequestPart("title") String title, @RequestPart("alt") String alt) throws IOException {
 
         ProfileUploadRequestDTO profileUploadRequestDTO = new ProfileUploadRequestDTO();
         profileUploadRequestDTO.setProfileId(profileId);
         profileUploadRequestDTO.setDescription(description);
+        profileUploadRequestDTO.setTitle(title);
+        profileUploadRequestDTO.setAlt(alt);
 
         ProfileUploadResponseDTO responseDTO = profileUploadService.createProfileUpload(file, profileUploadRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);

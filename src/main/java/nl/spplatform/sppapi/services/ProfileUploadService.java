@@ -58,6 +58,8 @@ public class ProfileUploadService {
         profileUpload.setContentType(file.getContentType());
         profileUpload.setDescription(profileUploadRequestDTO.getDescription());
         profileUpload.setProfile(profile);
+        profileUpload.setTitle(profileUploadRequestDTO.getTitle());
+        profileUpload.setAlt(profileUploadRequestDTO.getAlt());
 
         profileUploadRepository.save(profileUpload);
 
