@@ -17,6 +17,10 @@ public class ProfileUpload {
 
     private String contentType;
 
+    private String title;
+
+    private String alt;
+
     private String description;
 
     @ManyToOne
@@ -74,6 +78,23 @@ public class ProfileUpload {
 
     public void setContentType(String contentType) {
         this.contentType = contentType;
+    }
+
+
+    public String getTitle(){
+        return title;
+    }
+
+    public void setTitle(String title){
+        this.title = title;
+    }
+
+    public String getAlt(){
+        return alt;
+    }
+
+    public void setAlt(String alt){
+        this.alt = alt;
     }
 
     public String getDescription() {

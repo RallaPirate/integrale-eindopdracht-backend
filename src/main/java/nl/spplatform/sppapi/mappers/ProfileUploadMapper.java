@@ -13,6 +13,9 @@ public class ProfileUploadMapper {
         profileUploadResponseDTO.setFilename(profileUpload.getFilename());
         profileUploadResponseDTO.setContentType(profileUpload.getContentType());
         profileUploadResponseDTO.setUploadedAt(profileUpload.getUploadedAt());
+        profileUploadResponseDTO.setTitle(profileUpload.getTitle());
+        profileUploadResponseDTO.setAlt(profileUpload.getAlt());
+        profileUploadResponseDTO.setDescription(profileUpload.getDescription());
         return profileUploadResponseDTO;
     }
 
@@ -20,6 +23,8 @@ public class ProfileUploadMapper {
         var result = new ProfileUpload();
         result.setDescription(profileUploadRequestDTO.getDescription());
         result.setProfile(profile);
+        result.setTitle(profileUploadRequestDTO.getTitle());
+        result.setAlt(profileUploadRequestDTO.getAlt());
         return result;
     }
 }
