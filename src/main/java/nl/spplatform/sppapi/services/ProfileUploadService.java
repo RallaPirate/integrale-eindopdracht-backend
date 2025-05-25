@@ -9,6 +9,7 @@ import nl.spplatform.sppapi.models.ProfileUpload;
 import nl.spplatform.sppapi.repositories.ProfileRepository;
 import nl.spplatform.sppapi.repositories.ProfileUploadRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -68,8 +69,9 @@ public class ProfileUploadService {
 
     public List<ProfileUploadResponseDTO> getUploadsByProfile(Long profileId) {
         Profile profile = profileRepository.findById(profileId).orElseThrow(() -> new EntityNotFoundException("Profiel niet gevonden"));
+        Sort defaultSort = Sort.by(Sort.Direction.DESC, "uploadedAt");
 
-        List<ProfileUpload> uploads = profileUploadRepository.findByProfile(profile);
+        List<ProfileUpload> uploads = profileUploadRepository.findByProfile(profile, defaultSort);
         return uploads.stream().map(ProfileUploadMapper::toProfileUploadResponseDTO).collect(Collectors.toList());
     }
 }
